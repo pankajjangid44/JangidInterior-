@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quotation Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  input { margin-bottom: 10px; padding: 5px; width: 200px; }
+  table { border-collapse: collapse; margin-top: 20px; width: 100%; }
+  table, th, td { border: 1px solid #ccc; padding: 5px; text-align: left; }
+  th { background: #8b7355; color: #fff; }
+  button { padding: 6px 12px; margin-top: 10px; cursor: pointer; }
+  .deleteBtn { background: #c0392b; color: white; border: none; border-radius: 4px; }
+  .deleteBtn:hover { background: #e74c3c; }
+  #addItemBtn { background: #8b7355; color: #fff; border: none; border-radius: 4px; }
+  #addItemBtn:hover { background: #a1887f; }
+  #generatePDF { background: #2e7d32; color: #fff; border: none; border-radius: 4px; }
+  #generatePDF:hover { background: #43a047; }
+</style>
+</head>
+<body>
+
+<h2>Quotation Generator</h2>
+
+<label>Client Name: </label>
+<input type="text" id="clientName" placeholder="Enter client name"><br>
+
+<label>Project Name: </label>
+<input type="text" id="projectName" placeholder="Enter project name"><br>
+
+<table id="servicesTable">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Service Name</th>
+      <th>Area (sq.ft)</th>
+      <th>Rate (₹)</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Living Room -->
+    <tr data-category="Living Room">
+      <td>Living Room</td>
+      <td data-name="Wall Painting" data-rate="50">Wall Painting</td>
+      <td><input type="number" value="200" class="area"></td>
+      <td>50</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+    <tr data-category="Living Room">
+      <td>Living Room</td>
+      <td data-name="Flooring" data-rate="120">Flooring</td>
+      <td><input type="number" value="180" class="area"></td>
+      <td>120</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+
+    <!-- Bedroom -->
+    <tr data-category="Bedroom">
+      <td>Bedroom</td>
+      <td data-name="Wardrobe Installation" data-rate="400">Wardrobe Installation</td>
+      <td><input type="number" value="1" class="area"></td>
+      <td>400</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+
+    <!-- Kitchen -->
+    <tr data-category="Kitchen">
+      <td>Kitchen</td>
+      <td data-name="Modular Cabinets" data-rate="600">Modular Cabinets</td>
+      <td><input type="number" value="1" class="area"></td>
+      <td>600</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+
+    <!-- Bathroom -->
+    <tr data-category="Bathroom">
+      <td>Bathroom</td>
+      <td data-name="False Ceiling" data-rate="150">False Ceiling</td>
+      <td><input type="number" value="100" class="area"></td>
+      <td>150</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+    <tr data-category="Bathroom">
+      <td>Bathroom</td>
+      <td data-name="Tile Work" data-rate="200">Tile Work</td>
+      <td><input type="number" value="80" class="area"></td>
+      <td>200</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+
+    <!-- Office -->
+    <tr data-category="Office">
+      <td>Office</td>
+      <td data-name="Glass Partition" data-rate="350">Glass Partition</td>
+      <td><input type="number" value="50" class="area"></td>
+      <td>350</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+    <tr data-category="Office">
+      <td>Office</td>
+      <td data-name="Workstation Setup" data-rate="500">Workstation Setup</td>
+      <td><input type="number" value="5" class="area"></td>
+      <td>500</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+
+    <!-- Decor -->
+    <tr data-category="Decor">
+      <td>Decor</td>
+      <td data-name="Lighting Fixtures" data-rate="250">Lighting Fixtures</td>
+      <td><input type="number" value="10" class="area"></td>
+      <td>250</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+    <tr data-category="Decor">
+      <td>Decor</td>
+      <td data-name="Curtains & Blinds" data-rate="180">Curtains & Blinds</td>
+      <td><input type="number" value="5" class="area"></td>
+      <td>180</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+
+    <!-- Balcony -->
+    <tr data-category="Balcony">
+      <td>Balcony</td>
+      <td data-name="Deck Flooring" data-rate="220">Deck Flooring</td>
+      <td><input type="number" value="50" class="area"></td>
+      <td>220</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+    <tr data-category="Balcony">
+      <td>Balcony</td>
+      <td data-name="Railing Installation" data-rate="300">Railing Installation</td>
+      <td><input type="number" value="20" class="area"></td>
+      <td>300</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+
+    <!-- Exterior -->
+    <tr data-category="Exterior">
+      <td>Exterior</td>
+      <td data-name="Exterior Painting" data-rate="80">Exterior Painting</td>
+      <td><input type="number" value="500" class="area"></td>
+      <td>80</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+    <tr data-category="Exterior">
+      <td>Exterior</td>
+      <td data-name="Facade Cladding" data-rate="450">Facade Cladding</td>
+      <td><input type="number" value="100" class="area"></td>
+      <td>450</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+
+    <!-- Dining Room -->
+    <tr data-category="Dining Room">
+      <td>Dining Room</td>
+      <td data-name="Dining Table Setup" data-rate="700">Dining Table Setup</td>
+      <td><input type="number" value="1" class="area"></td>
+      <td>700</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+    <tr data-category="Dining Room">
+      <td>Dining Room</td>
+      <td data-name="Wall Paneling" data-rate="250">Wall Paneling</td>
+      <td><input type="number" value="100" class="area"></td>
+      <td>250</td>
+      <td><button class="deleteBtn">❌</button></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Grand Total:</strong> ₹<span id="grandTotal">0</span></p>
+
+<h3>Add Custom Item</h3>
+<label>Category: </label>
+<input type="text" id="newCategory" placeholder="e.g. Dining Room"><br>
+<label>Service Name: </label>
+<input type="text" id="newService" placeholder="e.g. Wall Paneling"><br>
+<label>Area (sq.ft / qty): </label>
+<input type="number" id="newArea" placeholder="Enter area"><br>
+<label>Rate (₹): </label>
+<input type="number" id="newRate" placeholder="Enter rate"><br>
+<button id="addItemBtn">Add Item</button>
+<br><br>
+<button id="generatePDF">Generate PDF</button>
+
+<script>
+const servicesTable = document.getElementById('servicesTable');
+const grandTotalEl = document.getElementById('grandTotal');
+
+function calculateTotal() {
+  let total = 0;
+  const rows = servicesTable.querySelectorAll('tbody tr');
+  rows.forEach(row => {
+    const area = parseFloat(row.querySelector('.area').value) || 0;
+    const rate = parseFloat(row.querySelector('td:nth-child(2)').dataset.rate) || 0;
+    total += area * rate;
+  });
+  grandTotalEl.innerText = total.toLocaleString('en-IN');
+}
+
+function attachDeleteEvents() {
+  document.querySelectorAll(".deleteBtn").forEach(btn => {
+    btn.onclick = () => {
+      if (confirm("Are you sure you want to delete this item?")) {
+        btn.closest("tr").remove();
+        calculateTotal();
+      }
+    };
+  });
+}
+
+servicesTable.addEventListener('input', calculateTotal);
+calculateTotal();
+attachDeleteEvents();
+
+document.getElementById("addItemBtn").addEventListener("click", () => {
+  const category = document.getElementById("newCategory").value.trim();
+  const service = document.getElementById("newService").value.trim();
+  const area = parseFloat(document.getElementById("newArea").value) || 0;
+  const rate = parseFloat(document.getElementById("newRate").value) || 0;
+
+  if (!category || !service || rate <= 0) {
+    alert("Please enter valid details for the item.");
+    return;
+  }
+
+  const tbody = servicesTable.querySelector("tbody");
+  const row = document.createElement("tr");
+  row.setAttribute("data-category", category);
+
+  row.innerHTML = `
+    <td>${category}</td>
+    <td data-name="${service}" data-rate="${rate}">${service}</td>
+    <td><input type="number" value="${area}" class="area"></td>
+    <td>${rate}</td>
+    <td><button class="deleteBtn">❌</button></td>
+  `;
+
+  tbody.appendChild(row);
+  calculateTotal();
+  attachDeleteEvents();
+
+  document.getElementById("newCategory").value = "";
+  document.getElementById("newService").value = "";
+  document.getElementById("newArea").value = "";
+  document.getElementById("newRate").value = "";
+});
+
+// ✅ Fixed PDF Generation
+document.getElementById("generatePDF").addEventListener("click", () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
+
+  const client = document.getElementById("clientName").value || "Unknown";
+  const project = document.getElementById("projectName").value || "Project";
+  const total = grandTotalEl.innerText;
+
+  doc.setFontSize(18);
+  doc.setFont("helvetica", "bold");
+  doc.text("Jangid Interior", 40, 50);
+  doc.setFontSize(14);
+  doc.text("Quotation", 40, 70);
+
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "normal");
+  doc.text(`Client: ${client}`, 40, 100);
+  doc.text(`Project: ${project}`, 40, 120);
+  doc.text(`Date: ${new Date().toLocaleDateString()}`, 40, 140);
+
+  let y = 160;
+  const rows = servicesTable.querySelectorAll('tbody tr');
+  const categories = {};
+
+  rows.forEach(row => {
+    const val = parseFloat(row.querySelector('.area').value) || 0;
+    if (val > 0) {
+      const td = row.querySelector('td:nth-child(2)');
+      const rate = parseFloat(td.dataset.rate);
+      const price = val * rate;
+      const cat = row.dataset.category || "Other";
+      if (!categories[cat]) categories[cat] = [];
+      categories[cat].push({ name: td.dataset.name, area: val, rate, price });
+    }
+  });
+
+  for (let cat in categories) {
+    doc.setFontSize(12);
+    doc.setTextColor(255, 255, 255);
+    doc.setFillColor(139, 115, 85);
+    doc.rect(40, y - 10, 520, 20, 'F');
+    doc.text(cat, 45, y + 5);
+    y += 30;
+
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(0, 0, 0);
+    categories[cat].forEach(item => {
+      doc.text(item.name, 50, y);
+      doc.text(`${item.area} × ₹${item.rate} = ₹${item.price.toLocaleString("en-IN")}`, 300, y);
+      y += 20;
+      if (y > 750) {
+        doc.addPage();
+        y = 50;
+      }
+    });
+    y += 10;
+  }
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text(`Grand Total: ₹${total}`, 40, y + 10);
+
+  const footerY = Math.min(y + 50, 800);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "italic");
+  doc.text("Thank you for choosing Jangid Interior.", 40, footerY);
+
+  doc.save(`Quotation_${client}_${new Date().toISOString().split('T')[0]}.pdf`);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback Page | Jangid Interiors Website Review</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #8b7355;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #8b7355;
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 120px;
+    }
+
+    .rating {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-start;
+      margin-top: 10px;
+    }
+
+    .rating i {
+      color: #ccc;
+      cursor: pointer;
+      font-size: 22px;
+      transition: color 0.3s;
+    }
+
+    .rating i.active {
+      color: #f1c40f;
+    }
+
+    button {
+      background-color: #8b7355;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #7a6348;
+    }
+
+    .thankyou {
+      text-align: center;
+      color: green;
+      font-weight: 600;
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Jangid Interiors — Feedback Page</h1>
+    <p>Provide your valuable feedback for the website design below.</p>
+  </header>
+
+  <div class="container">
+    <h2>Website Feedback Form</h2>
+    <form id="feedbackForm">
+      <div>
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="Enter your name" required>
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+      </div>
+
+      <div>
+        <label for="usability">How easy is the website to use?</label>
+        <select id="usability" required>
+          <option value="">Select</option>
+          <option>Very Easy</option>
+          <option>Moderate</option>
+          <option>Difficult</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Rate the design & layout:</label>
+        <div class="rating" id="designRating">
+          <i class="fa fa-star" data-value="1"></i>
+          <i class="fa fa-star" data-value="2"></i>
+          <i class="fa fa-star" data-value="3"></i>
+          <i class="fa fa-star" data-value="4"></i>
+          <i class="fa fa-star" data-value="5"></i>
+        </div>
+      </div>
+
+      <div>
+        <label for="feedback">Your Feedback</label>
+        <textarea id="feedback" placeholder="Write your comments..." required></textarea>
+      </div>
+
+      <div>
+        <label for="suggestions">Any suggestions for improvement?</label>
+        <textarea id="suggestions" placeholder="Your suggestions..."></textarea>
+      </div>
+
+      <button type="submit">Submit Feedback</button>
+      <div class="thankyou" id="thankYouMsg">✅ Thank you for your valuable feedback!</div>
+    </form>
+  </div>
+
+  <script>
+    // Star Rating Logic
+    const stars = document.querySelectorAll('#designRating i');
+    let selectedRating = 0;
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRating = star.getAttribute('data-value');
+        stars.forEach(s => s.classList.remove('active'));
+        for (let i = 0; i < selectedRating; i++) {
+          stars[i].classList.add('active');
+        }
+      });
+    });
+
+    // Form Submission Logic
+    document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const usability = document.getElementById('usability').value;
+      const feedback = document.getElementById('feedback').value;
+      const suggestions = document.getElementById('suggestions').value;
+      const data = { name, email, usability, rating: selectedRating, feedback, suggestions };
+      console.log('Feedback submitted:', data);
+      document.getElementById('thankYouMsg').style.display = 'block';
+      this.reset();
+      stars.forEach(s => s.classList.remove('active'));
+      selectedRating = 0;
+    });
+  </script>
+</body>
+</html>
